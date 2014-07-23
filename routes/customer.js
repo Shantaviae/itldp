@@ -19,6 +19,12 @@ exports.portal = function(req, res){
 
   var myOrders = [];
   var myEquip = [];
+  var myEquipment = [];
+  var myServicetypes = [];
+  var myPriorities = [];
+  var myPmTypes = [];
+
+  var date = moment();
 
   if (!req.session.loggedIn){
         res.redirect('/login');
@@ -54,12 +60,89 @@ exports.portal = function(req, res){
                       }
                         callback();
                     });
-                }], function(err){
+                },
+                function(callback){
+                Equipment.find({ _User: req.session.user._id })
+                .populate('_Product')
+                .sort('_Product')
+                .exec(function (err, equipment){
+                    if(!err) {
+                        equipment.forEach(function(myequip){
+                            myEquipment.push({
+                                "_id": myequip._id,
+                                "SerialNumber": myequip.SerialNumber,
+                                "ProductName": myequip._Product.ProductName,
+                                "Room": myequip.Room,
+                                "ProductID": myequip._Product._id
+                            });
+                        });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+                ProblemType.find()
+                .exec(function (err, problemtypes){
+                    if(!err) {
+                        problemtypes.forEach(function(myproblemtypes){
+                            myServicetypes.push({
+                                "_id": myproblemtypes._id,
+                                "ProblemTypeDescription": myproblemtypes.ProblemTypeDescription
+                            });
+                        });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+                PMType.find()
+                .exec(function (err, pmtypes){
+                    if(!err){
+                        pmtypes.forEach(function(mypmtypes){
+                            myPmTypes.push({
+                                "_id": mypmtypes._id,
+                                "PMDescription": mypmtypes.PMDescription
+                            });
+                         });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+                 Priority.find()
+                .exec(function (err, priorities){
+                    if(!err){
+                        priorities.forEach(function(mypriorities){
+                            myPriorities.push({
+                                "_id": mypriorities._id,
+                                "PriorityDescription": mypriorities.PriorityDescription
+                            });
+                        });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                    
+                });
+            }], function(err){
                         if (err) return next(err);
                         else {
                           res.render('customer.jade', 
                           { Orders: myOrders,
-                            Equipment: myEquip})
+                            Equipment: myEquip,
+                            title: "Create a New Service Request",
+                            equipments: myEquipment,
+                            serviceTypes: myServicetypes,
+                            pmTypes: myPmTypes,
+                            priorities: myPriorities,
+                            customerName: req.session.user.CustomerName, 
+                            Today: date})
                         }
                     }
             );
@@ -72,6 +155,7 @@ exports.create = function(req, res){
     var myServicetypes = [];
     var myPriorities = [];
     var myPmTypes = [];
+
     if (!req.session.loggedIn){
         res.redirect('/login');
     }else {
