@@ -17,11 +17,11 @@ html
             p.form-control-static #{moment(Today).format('dddd, MMMM Do')}
         .form-group
           label.col-sm-2.control-label(for="Equipment") Equipment:
-          .col-sm-10
-            select.form-control(name="Equipment" id="Equipment" required autofocus)
-              option(value="" default selected) Select Your Equipment For Service
-              - for equipment in equipments
-                option(value="{\"equipid\": #{equipment._id}, \"prodid\": #{equipment.ProductID}}") #{equipment.SerialNumber} - #{equipment.ProductName} - #{equipment.Room}
+          .col-sm-10 #{clicked}
+            //- select.form-control(name="Equipment" id="Equipment" required autofocus)
+            //-   option(value="" default selected) Select Your Equipment For Service
+            //-   - for equipment in equipments
+            //-     option(value="{\"equipid\": #{equipment._id}, \"prodid\": #{equipment.ProductID}}") #{equipment.SerialNumber} - #{equipment.ProductName} - #{equipment.Room}
         .form-group
           label.col-sm-2.control-label(for="ProblemType") Service Type:
           .col-sm-10

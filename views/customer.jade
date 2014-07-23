@@ -37,9 +37,9 @@ html
 
         for order in Orders
           tr
-            td(style="padding:5px")= order._id
+            td(style="padding:5px")
+              a.updateVar(data-id='#{order._id}' data-toggle="modal")= order._id
             td(style="padding:5px")= order._Equipment.SerialNumber
-            td(style="padding:5px")= order._Product.ProductName
             td(style="padding:5px") #{moment(order.OpenDate).format('dddd, MMMM D, YYYY HH:mm')}
             td(style="padding:5px")= order.ProblemTypeDescription
             td(style="padding:5px")= order.CurrentStatus
@@ -56,14 +56,14 @@ html
           tr
             td(style="padding:5px") 
               //- a(href="/customer/create?serial=#{equip.SerialNumber}")=equip.SerialNumber
-              a(href="#myModal?serial=#{equip.SerialNumber}" data-toggle="modal" data-target="#myModal")=equip.SerialNumber
+              a.updateVar2(data-id='#{equip.SerialNumber} - #{equip._Product._id} - #{equip.Room}' data-toggle="modal")=equip.SerialNumber
             td(style="padding:5px")= equip._Product.ProductName
             td(style="padding:5px")= equip.NextPMDescription
             td(style="padding:5px") #{moment(equip.NextPMDate).format('MMMM D, YYYY')}
 
 
     //-
-    //- Create a new ervice request modal
+    //- See service related information
     //-
     form(role="form" id="create" name="create" method="post" action="/customer/create")
       .modal.fade#myModal(tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
@@ -75,8 +75,8 @@ html
             .modal-body 
               .modal-body.form-horizontal
                 .form-group
-                  label.col-sm-2.control-label Customer:
-                  .col-sm-10
+                  label.col-sm-3.control-label Customer:
+                  .col-sm-9
                     p.form-control-static #{customerName}
                 .form-group
                   label.col-sm-2.control-label Date:
@@ -85,10 +85,11 @@ html
                 .form-group
                   label.col-sm-2.control-label(for="Equipment") Equipment:
                   .col-sm-10
-                    select.form-control(name="Equipment" id="Equipment" required autofocus)
-                      option(value="" default selected) Select Your Equipment For Service
-                      - for equipment in equipments
-                        option(value="{\"equipid\": #{equipment._id}, \"prodid\": #{equipment.ProductID}}") #{equipment.SerialNumber} - #{equipment.ProductName} - #{equipment.Room}
+                    p.form-control#EquipmentDefault
+                    //- select.form-control(name="Equipment" id="Equipment" required autofocus)
+                    //-   option(value="" default selected)
+                    //-   - for equipment in equipments
+                    //-     option(value="{\"equipid\": #{equipment._id}, \"prodid\": #{equipment.ProductID}}") #{equipment.SerialNumber} - #{equipment.ProductName} - #{equipment.Room}
                 .form-group
                   label.col-sm-2.control-label(for="ProblemType") Service Type:
                   .col-sm-10
@@ -123,6 +124,74 @@ html
                   input(type="hidden" name="Today" value="#{Today}")
                   button.btn.btn-success(type="submit" name="submit" value="submit") Create New Service Request
                   button.btn.btn-danger(type='button' data-dismiss='modal') Cancel
+
+
+    //-
+    //- See service related information
+    //-
+    form(role="form" id="create" name="create" method="post" action="/customer/create")
+      .modal.fade#myModal2(tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+            .modal-header
+              button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+              h4.myModalLabel.modal-title Create a New Service Request
+            .modal-body 
+              .modal-body.form-horizontal
+                .form-group
+                  label.col-sm-3.control-label Customer:
+                  .col-sm-9
+                    p.form-control-static #{customerName}
+                .form-group
+                  label.col-sm-2.control-label Date:
+                  .col-sm-10
+                    p.form-control-static #{moment(Today).format('dddd, MMMM Do YYYY')}
+                .form-group
+                  label.col-sm-2.control-label(for="Equipment") Equipment:
+                  .col-sm-10
+                    //-p.form-control-static#EquipmentDefault2
+                    select.form-control(name="Equipment" id="Equipment" required autofocus)
+                      option(value="" default selected)
+                      - for equipment in equipments
+                        option(value="{\"equipid\": #{equipment._id}, \"prodid\": #{equipment.ProductID}}") #{equipment.SerialNumber} - #{equipment.ProductName} - #{equipment.Room}
+                .form-group
+                  label.col-sm-2.control-label(for="ProblemType") Service Type:
+                  .col-sm-10
+                    select.form-control(name="ProblemType" id="ProblemType"  required)
+                      option(value="" default selected) Select The Problem Type You Are Experiencing
+                      - for serviceType in serviceTypes
+                        option(value="#{serviceType.ProblemTypeDescription}") #{serviceType.ProblemTypeDescription}
+                .form-group(id="PM")
+                .form-group
+                  label.col-sm-2.control-label(for="Priority") Priority:
+                  .col-sm-10
+                    select.form-control(name="Priority" id="Priority"  required)
+                      option(value="" default selected) Select The Severity Of The Issue You Are Experiencing
+                      - for priority in priorities
+                        option(value="#{priority.PriorityDescription}") #{priority.PriorityDescription}
+                .form-group
+                  label.col-sm-2.control-label(for="ContactName") Contact Name:
+                  .col-sm-10
+                    input.form-control(type="text" name="ContactName" id="ContactName"  required placeholder="Example: Albert Einstien")
+                .form-group
+                  label.col-sm-2.control-label(for="ContactEmail") Contact Email:
+                  .col-sm-10
+                    input.form-control(type="email" name="ContactEmail" id="ContactEmail"  required placeholder="Example: aeinstein@genius.com")
+                .form-group
+                  label.col-sm-2.control-label(for="ContactPhone") Contact Phone:
+                  .col-sm-10
+                    input.form-control(type="tel" name="ContactPhone" id="ContactPhone"  required placeholder="Example: 123-456-7890")
+                .form-group
+                  .col-sm-offset-2.col-sm-10
+                    textarea.form-control(id="ProblemNotes" rows="7" name="ProblemNotes" placeholder="Add Any Additonal Problem Notes Here...")
+                .modal-footer
+                  input(type="hidden" name="Today" value="#{Today}")
+                  //input(type="hidden" name="Equipment" id="Equipment")
+                  button.btn.btn-success(type="submit" name="submit" value="submit") Create New Service Request
+                  button.btn.btn-danger(type='button' data-dismiss='modal') Cancel
+
+
+
     script
       $(document).ready(function(){
         $('#ProblemType').change(function() {
@@ -137,4 +206,20 @@ html
             $('.PM2').hide();
           }
         });
+
+        $(".updateVar").click(function(){ // Click to only happen on announce links
+           //$("#EquipmentDefault").val($(this).data('id'));
+           $("#EquipmentDefault").text($(this).data('id'));
+           $('#myModal').modal('show');
+         });
+
+        $(".updateVar2").click(function(){ // Click to only happen on announce links
+           //$("#EquipmentDefault").val($(this).data('id'));
+           var EquipmentID = $(this).data('id');
+           $("#EquipmentDefault2").text(EquipmentID);
+           $("#Equipment").val(EquipmentID);
+           $('#myModal2').modal('show');
+
+
+         });
       });
