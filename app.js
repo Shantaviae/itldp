@@ -7,6 +7,7 @@ var db = require('./model/db');
 var routes = require('./routes');
 var user = require('./routes/user');
 var customer = require('./routes/customer');
+var engineer = require('./routes/engineer');
 
 var helloworld = require('./routes/helloworld');
 var hi = require('./routes/hi');
@@ -98,6 +99,9 @@ app.get('/logout', user.doLogout);							//Invalidate Session and Logout.
 app.get('/customer', customer.portal);
 app.get('/customer/create', customer.create);				//Form to Create a new Service Order
 app.post('/customer/create', customer.doCreate); 				//Process New Service Ticket
+
+//engineer routes
+app.get('/engineer', engineer.portal);
 
 //SeviceDetails
 

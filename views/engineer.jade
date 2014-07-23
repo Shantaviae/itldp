@@ -1,0 +1,76 @@
+doctype 5
+html
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title SSP ReBoot
+    link(href="/stylesheets/style.css" rel="stylesheet")
+    link(href="/stylesheets/bootstrap.min.css" rel="stylesheet")
+    link(href="/stylesheets/bootstrap-theme.css" rel="stylesheet")
+  body
+    script(src="/javascripts/jquery-2.0.3.min.js")
+    script(src="/javascripts/bootstrap.min.js")
+
+    //Header
+    .page-header
+      ul.nav.nav-pills
+        li.active 
+          a(href="/hi") Home
+        li 
+          a(href="/") Settings
+        li(style="float:right")
+          a(href="/") Log Out
+
+    //Jumbotron
+    .jumbotron
+      .container
+    h1 On-Site Service Orders 
+    div
+      table
+        tr
+          th Service Order
+          th Customer 
+          th Product
+          th Problem Type
+          th Priority
+
+        for onsite in onsited
+          tr
+            td= onsite._id
+            td= onsite.CustomerName
+            td= onsite._Product
+            td= onsite.ProblemTypeDescription
+            td= onsite.PriorityDescription
+    h1 Accepted Service Orders 
+    div
+      table
+        tr
+          th Service Order
+          th Customer 
+          th Product
+          th Problem Type
+          th Priority
+
+        for accept in accepted
+          tr
+            td= accept._id
+            td= accept.CustomerName
+            td= accept._Product
+            td= accept.ProblemTypeDescription
+            td= accept.PriorityDescription
+    h1 Assigned Service Orders 
+    div
+      table
+        tr
+          th Service Order
+          th Customer 
+          th Product
+          th Problem Type
+          th Priority
+
+        for assign in assigned
+          tr
+            td= assign._id
+            td= assign.CustomerName
+            td= assign._Product
+            td= assign.ProblemTypeDescription
+            td= assign.PriorityDescription
