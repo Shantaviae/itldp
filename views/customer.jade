@@ -1,0 +1,60 @@
+doctype 5
+html
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    title SSP ReBoot
+    link(href="/stylesheets/style.css" rel="stylesheet")
+    link(href="/stylesheets/bootstrap.min.css" rel="stylesheet")
+    link(href="/stylesheets/bootstrap-theme.css" rel="stylesheet")
+  body
+    script(src="/javascripts/jquery-2.0.3.min.js")
+    script(src="/javascripts/bootstrap.min.js")
+
+    //Header
+    .page-header
+      ul.nav.nav-pills
+        li.active 
+          a(href="/hi") Home
+        li 
+          a(href="/") Settings
+        li(style="float:right")
+          a(href="/") Log Out
+
+    //Jumbotron
+    .jumbotron
+      .container
+
+    h1 Open Service Orders 
+    div
+      table(style="width:100%")
+        tr
+          th(style="padding:5px; color:grey;") Service Order
+          th(style="padding:5px; color:grey;") Equipment
+          th(style="padding:5px; color:grey;") Product
+          th(style="padding:5px; color:grey;") Date Service Requested
+          th(style="padding:5px; color:grey;") Problem Type
+          th(style="padding:5px; color:grey;") Status
+
+        for order in Orders
+          tr
+            td(style="padding:5px")= order._id
+            td(style="padding:5px")= order._Equipment.SerialNumber
+            td(style="padding:5px")= order._Product.ProductName
+            td(style="padding:5px") #{moment(order.OpenDate).format('dddd, MMMM D, YYYY HH:mm')}
+            td(style="padding:5px")= order.ProblemTypeDescription
+            td(style="padding:5px")= order.CurrentStatus
+    h1 My Equipment
+    div
+      table(style="width:100%")
+        tr
+          th(style="padding:5px; color:grey;") Equipment
+          th(style="padding:5px; color:grey;") Product
+          th(style="padding:5px; color:grey;") Maintenance
+          th(style="padding:5px; color:grey;") Date Required
+
+        for equip in Equipment
+          tr
+            td(style="padding:5px")= equip.SerialNumber
+            td(style="padding:5px")= equip._Product.ProductName
+            td(style="padding:5px")= equip.NextPMDescription
+            td(style="padding:5px") #{moment(equip.NextPMDate).format('MMMM D, YYYY')}

@@ -18,10 +18,6 @@ var query = require('./routes/query');
 
 var contactus = require('./routes/contactus');
 
-//SSP Sprint routes declarations
-var setupDB = require('./routes/setupDB');
-
-
 var http = require('http');
 var path = require('path');
 
@@ -54,9 +50,6 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-
-//SSP Sprint related routes
-app.get('/setupDB', setupDB.setup);
 
 //Form contact us
 app.get('/contactus', contactus.displayform);
@@ -102,7 +95,7 @@ app.get('/logout', user.doLogout);							//Invalidate Session and Logout.
 
 
 //Customer Routes
-
+app.get('/customer', customer.portal);
 app.get('/customer/create', customer.create);				//Form to Create a new Service Order
 app.post('/customer/create', customer.doCreate); 				//Process New Service Ticket
 
