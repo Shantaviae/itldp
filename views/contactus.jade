@@ -1,0 +1,61 @@
+doctype 5
+html
+  head
+    title #{title}
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body(style='text-align:left;')
+    img(src="images/contactus-banner.jpg") 
+    h1 Sample Form
+    form(name='form1'  action='' method='post')
+      p.instructions Do you have any questions? If so, please enter your questions here...
+      textarea(name='question', cols='50', rows = '5', required)
+      font(color='blue') *
+      p.instructions Please fill out your contact info.
+      table(border='0')
+        tr
+          td Where do you work?
+          td
+            input(name='work', type='text', size='30', maxlength='30', required)
+            font(color='blue') *
+        tr
+          td Position
+          td
+            input(name='position', type='text', size='30', maxlength='30', required)
+            font(color='blue') *
+        tr
+          td Name
+          td
+            input(name='names', type='text', size='30', maxlength='30', required)
+            font(color='blue') *
+        tr
+          td Address
+          td
+            input(name='address1', type='text', size='30', maxlength='30', required)
+            font(color='blue') *
+        tr
+          td 
+          td
+            input(name='address2', type='text', size='30', maxlength='30')
+            font(color='blue') &nbsp;
+        tr
+          td City
+          td
+            input(name='city', type='text', size='30', maxlength='30', required)
+            font(color='blue') *
+        tr
+          td State/Zip
+          td
+            input(name='state', type='text', size='8', maxlength='2', required)
+
+            font(color='blue') *
+            input(name='zip', type='text', size='15', maxlength='5', required)
+            font(color='blue') *
+        tr
+          td Email Address
+          td
+            input(name='email', type='text', size='30', maxlength='30', required)
+            font(color='blue') *
+        tr
+          td
+            input(type='submit', name='submit', value='Send to JnJ')
+          td.instructions The indicated fields are required.

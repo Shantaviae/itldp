@@ -1,0 +1,36 @@
+doctype 5
+html
+  head
+    title #{title}
+    link(rel='stylesheet', href='/stylesheets/style.css')
+  body(style='text-align:left;')
+    img(src="images/contactus-banner.jpg") 
+    h1 Your submission has been received!
+    table 
+      tr
+        td Question
+        td #{question}
+      tr
+        td Work:
+        td #{work}
+      tr
+        td Position:
+        td #{position}
+      tr
+        td Name:
+        td #{names}
+      tr
+        td Address:
+        td #{address1} #{address2}
+      tr
+        td City:
+        td #{city}
+      tr
+        td State/Zip:
+        td #{state} #{zip}
+      tr
+        td Email Address:
+        td #{email}
+      tr
+        td(colspan="2") 
+          a(href="/contactus" action="") Return to contact us
