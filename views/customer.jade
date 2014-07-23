@@ -54,7 +54,8 @@ html
 
         for equip in Equipment
           tr
-            td(style="padding:5px")= equip.SerialNumber
+            td(style="padding:5px") 
+              a(href="/customer/create?serial=#{equip.SerialNumber}")=equip.SerialNumber
             td(style="padding:5px")= equip._Product.ProductName
             td(style="padding:5px")= equip.NextPMDescription
             td(style="padding:5px") #{moment(equip.NextPMDate).format('MMMM D, YYYY')}

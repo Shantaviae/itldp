@@ -20,45 +20,50 @@ exports.portal = function(req, res){
   var myOrders = [];
   var myEquip = [];
 
-  async.parallel([
-      function(callback){
-        ServiceOrder.find({CloseDate: {$exists: false} })
-        .where('_CreatedBy').equals(48243)
-        .populate('_Product')
-        .populate('_Equipment')
-        .exec(function (err, orders){
-          if (err){
-            return callback(err);
-          }
-            orders.forEach(function(orders){
-              myOrders.push(orders);
-            });
-            callback();
-        });
-      },
-      function(callback){
-        Equipment.find({ _User: 48243 })
-            .populate('_Product')
-            .sort('NextPMDate')
-            .exec(function (err, equipment){
-              if (!err){
-                equipment.forEach(function(equipment){
-                  myEquip.push(equipment);
-                  });
-              }else {
+  if (!req.session.loggedIn){
+        res.redirect('/login');
+    }else {
+
+          async.parallel([
+              function(callback){
+                ServiceOrder.find({CloseDate: {$exists: false} })
+                .where('_CreatedBy').equals(req.session.user._id )
+                .populate('_Product')
+                .populate('_Equipment')
+                .exec(function (err, orders){
+                  if (err){
                     return callback(err);
-              }
-                callback();
-            });
-        }], function(err){
-                if (err) return next(err);
-                else {
-                  res.render('customer.jade', 
-                  { Orders: myOrders,
-                    Equipment: myEquip})
-                }
-            }
-    );
+                  }
+                    orders.forEach(function(orders){
+                      myOrders.push(orders);
+                    });
+                    callback();
+                });
+              },
+              function(callback){
+                Equipment.find({ _User: req.session.user._id })
+                    .populate('_Product')
+                    .sort('NextPMDate')
+                    .exec(function (err, equipment){
+                      if (!err){
+                        equipment.forEach(function(equipment){
+                          myEquip.push(equipment);
+                          });
+                      }else {
+                            return callback(err);
+                      }
+                        callback();
+                    });
+                }], function(err){
+                        if (err) return next(err);
+                        else {
+                          res.render('customer.jade', 
+                          { Orders: myOrders,
+                            Equipment: myEquip})
+                        }
+                    }
+            );
+    }
 }; 
 
 //Create service request
