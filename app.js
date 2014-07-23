@@ -102,6 +102,7 @@ app.post('/customer/create', customer.doCreate); 				//Process New Service Ticke
 
 //engineer routes
 app.get('/engineer', engineer.portal);
+app.post('/engineer', engineer.Accept);
 
 //SeviceDetails
 

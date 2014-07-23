@@ -97,6 +97,7 @@ exports.portal = function(req, res){
 				.sort('PriorityDescription')
 				.exec(function (err, ServiceOrder){
 					ServiceOrder.forEach(function(ServiceOrder){
+						console.log(ServiceOrder);
 						myAssigned.push({
 							"_id": ServiceOrder._id,
 							"PriorityDescription": ServiceOrder.PriorityDescription,
@@ -113,7 +114,7 @@ exports.portal = function(req, res){
 							"CustomerContactInfo": ServiceOrder.CustomerContactInfo
 							//"CurrentStatus": ServiceOrder.CurrentStatus
 						});
-						//console.log(myOrders);
+					
 					});
 					callback();
 				});
@@ -159,4 +160,55 @@ exports.portal = function(req, res){
 				}
 		);
 	};
+};
+exports.Accept = function(req, res){ 
+	console.log(req.body._id);
+	ServiceOrder.findById( req.body._id )
+	.exec(function (err, serviceorder){
+		console.log(serviceorder)
+        serviceorder.ServiceDetails.push({
+        	_id: (serviceorder.ServiceDetails.length+1),
+            _User: req.session.user._id,
+            StatusDescription: "Accepted",
+            AcceptedDate: req.body.Today
+        });
+        serviceorder.CurrentStatus = "Accepted";
+        console.log(serviceorder)
+        serviceorder.save(function (err, serviceorder){
+        	res.redirect('/engineer')
+        });
+	});
+};
+exports.Checkin = function(req, res){ 
+	console.log(req.body._id);
+	ServiceOrder.findById( req.body._id )
+	.exec(function (err, serviceorder){
+		console.log(serviceorder)
+        serviceorder.ServiceDetails.push({
+        	_id: (serviceorder.ServiceDetails.length+1),
+            _User: req.session.user._id,
+            StatusDescription: "On-site",
+            Checkin: req.body.Today
+        });
+        serviceorder.CurrentStatus = "On-site";
+        console.log(serviceorder)
+        serviceorder.save(function (err, serviceorder){
+        	res.redirect('/engineer')
+        });
+	});
+};
+exports.Checkout = function(req, res){ 
+	console.log(req.body._id);
+	ServiceOrder.findById( req.body._id )
+	.exec(function (err, serviceorder){
+		console.log(serviceorder)
+      	var id = serviceorder.ServiceDetails.length;
+        serviceorder.ServiceDetails[id].StatusDescription = req.body.StatusDescription;
+        serviceorder.ServiceDetails[id].ActionNotes = req.body.StatusDescription;
+        Checkout: req.body.Today;
+        serviceorder.CurrentStatus = req.body.StatusDescription;
+        serviceorder.save(function (err, serviceorder){
+        	res.redirect('/engineer')
+        });
+	});
 };

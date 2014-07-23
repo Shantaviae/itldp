@@ -74,3 +74,8 @@ html
             td= assign._Product
             td= assign.ProblemTypeDescription
             td= assign.PriorityDescription
+            td
+              form(name='form1'  action='' method='post')
+                input(type="hidden" name="Today" value="#{Today}")
+                input(type="hidden" name="_id" value="547536") 
+                button.btn.btn-success(type="submit" name="submit" value="submit") accept
