@@ -232,7 +232,7 @@ exports.portal = function(req, res){
 					ServiceOrder.forEach(function(ServiceOrder){
 						myOrders.push({
 							"_id": ServiceOrder._id,
-							"CurrentStatus": CurrentStatus,
+							"CurrentStatus": ServiceOrder.CurrentStatus,
 							"PriorityDescription": ServiceOrder.PriorityDescription,
 							"CustomerName": ServiceOrder._CreatedBy.CustomerName,
 							"Street": ServiceOrder._CreatedBy.Street,
