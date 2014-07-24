@@ -45,6 +45,7 @@ html
               textarea.form-control(id="ActionNotes" rows="7" name="ActionNotes" placeholder="Add Any Action Notes Here...")
           .modal-footer
             input(type="hidden" name="Today" value="#{Today}")
+            input(type="hidden" name="_id" value="#{_id}")
             button.btn.btn-success(type="submit" name="submit" value="submit") Check Out
             button.btn.btn-danger(type='button' data-dismiss='modal') Cancel
     script

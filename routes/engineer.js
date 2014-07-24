@@ -9,6 +9,7 @@ var Equipment = mongoose.model('Equipment');
 var ServiceOrder = mongoose.model('ServiceOrder');
 var _ = require('underscore');
 var async = require('async');
+var moment = require('moment');
 
 
 //Render customer service order details - Engineering Portal
@@ -56,59 +57,6 @@ var async = require('async');
     }else {
 
           async.parallel([
-              function(callback){
-                ServiceOrder.find({CloseDate: {$exists: false} })
-                .where('_AssignedTo').equals(req.session.user._id )
-                .populate('_Product')
-                .populate('_Equipment')
-                .exec(function (err, orders){
-                  if (err){
-                    return callback(err);
-                  }
-                    orders.forEach(function(orders){
-                      myOrders.push(orders);
-                    });
-                    callback();
-                });
-              },
-              function(callback){
-                Equipment.find({ _User: req.session.user._id })
-                    .populate('_Product')
-                    .sort('NextPMDate')
-                    .exec(function (err, equipment){
-                      if (!err){
-                        equipment.forEach(function(equipment){
-                          myEquip.push(equipment);
-                          });
-                      }else {
-                            return callback(err);
-                      }
-                        callback();
-                    });
-                },
-                function(callback){
-                Equipment.find({ _User: req.session.user._id })
-                .populate('_Product')
-                .sort('_Product')
-                .exec(function (err, equipment){
-                    if(!err) {
-                        equipment.forEach(function(myequip){
-                            if (myequip.SerialNumber == req.query.serial){
-                                myEquipment.push({
-                                    "_id": myequip._id,
-                                    "SerialNumber": myequip.SerialNumber,
-                                    "ProductName": myequip._Product.ProductName,
-                                    "Room": myequip.Room,
-                                    "ProductID": myequip._Product._id
-                                });
-                            }
-                        });
-                    }else {
-                        return callback(err);
-                    }
-                    callback();
-                });
-            },
             function(callback){
                 Status.find()
                 .where('_id').lte(4)
@@ -164,13 +112,14 @@ var async = require('async');
                           res.render('modal2engineer.jade', 
                           { Orders: myOrders,
                             Equipment: myEquip,
-                            title: "Create a New Service Request",
+                            title: "Check Out",
                             equipments: myEquipment,
                             statusTypes: myStatus,
                             pmTypes: myPmTypes,
                             priorities: myPriorities,
                             customerName: req.session.user.CustomerName, 
-                            Today: date})
+                            _id: req.query.orderID
+                            })
                         }
                     }
             );
@@ -360,29 +309,36 @@ exports.Checkin = function(req, res){
             Checkin: req.body.Today
         });
         serviceorder.CurrentStatus = "On-site";
-        console.log(serviceorder)
-        //console.log("bugs check in");
+        console.log(serviceorder);
         serviceorder.save(function (err, serviceorder){
         	res.redirect('/engineer')
         });
 	});
 };
 exports.Checkout = function(req, res){ 
-	console.log(req.body._id);
+	console.log(req.body);
 	ServiceOrder.findById( req.body._id )
 	.exec(function (err, serviceorder){
 		//console.log(serviceorder)
       	var id = serviceorder.ServiceDetails.length-1;
       	console.log(id);
-      	console.log(serviceorder.ServiceDetails[1])
+      	//console.log(serviceorder.ServiceDetails[1])
         serviceorder.ServiceDetails[id].StatusDescription = req.body.StatusDescription;
-        serviceorder.ServiceDetails[id].ActionNotes = req.body.StatusDescription;
+        serviceorder.ServiceDetails[id].ActionNotes = req.body.ActionNotes;
         serviceorder.ServiceDetails[id].Checkout = req.body.Today;
         serviceorder.ServiceDetails[id].ActualMinutes = moment(serviceorder.ServiceDetails[id].Checkin).diff(req.body.Today, 'minutes')
         serviceorder.CurrentStatus = req.body.StatusDescription;
-        if (req.body.StatusDescription = "Completed") serviceorder.CloseDate = req.body.Today;
+        if (serviceorder.CurrentStatus == "Completed") {
+            serviceorder.CloseDate = req.body.Today;
+        }
+        console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk    " +moment(serviceorder.ServiceDetails[id].Checkin).diff(req.body.Today, 'minutes'));
         serviceorder.save(function (err, serviceorder){
+            if(!err){
         	res.redirect('/engineer')
+                
+            } else{
+                console.log('siloadfsiadubfioudsbfoiuabsf    '+err);
+            }
         });
 	});
 };
