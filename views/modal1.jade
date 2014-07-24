@@ -50,6 +50,18 @@ html
                 div.col-sm-12.form-control-static(style="padding-left:35px;") - Check In Date: #{moment(services.Checkin).format('MMMM D, YYYY h:mm a')}
                 div.col-sm-12.form-control-static(style="padding-left:35px;") - Check Out Date: #{moment(services.Checkout).format('MMMM D, YYYY h:mm a')}
                 div.col-sm-12.form-control-static(style="padding-left:35px;") - Action Notes: #{services.ActionNotes}
+              else if services.StatusDescription == 'Waiting For Parts'
+                div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check In Date: #{moment(services.Checkin).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check Out Date: #{moment(services.Checkout).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Action Notes: #{services.ActionNotes}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Actual Minutes: #{services.ActualMinutes} Minutes
+              else if services.StatusDescription == 'Return Next Day'
+                div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check In Date: #{moment(services.Checkin).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check Out Date: #{moment(services.Checkout).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Action Notes: #{services.ActionNotes}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Actual Minutes: #{services.ActualMinutes} Minutes
               else if services.StatusDescription == 'Waiting For Customer Approval'
                 div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
                 div.col-sm-12.form-control-static(style="padding-left:35px;") - Check In Date: #{moment(services.Checkin).format('MMMM D, YYYY h:mm a')}
