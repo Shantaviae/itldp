@@ -45,7 +45,7 @@ html
                 input(type="hidden" name="StatusDescription" value="Completed")
                 input(type="hidden" name="ActionNotes" value="test note")
                 button.btn.btn-success(type="submit" name="submit" value="submit") checkout
-    h1 Accepted Service Orders 
+    h1 Current Service Orders 
     div
       table
         tr
@@ -61,6 +61,7 @@ html
             td= accept.CustomerName
             td= accept._Product
             td= accept.ProblemTypeDescription
+            td= accept.CurrentStatus
             td= accept.PriorityDescription
             td 
               form(name='form2'  action='/engineer/checkin' method='post')
