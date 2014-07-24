@@ -11,8 +11,167 @@ var _ = require('underscore');
 var async = require('async');
 
 
-//Customer Route Functions
+//Render customer service order details
+ exports.details = function (req, res){
+    var date = moment();
 
+    if (!req.session.loggedIn){
+        res.redirect('/login');
+    }else {
+
+        ServiceOrder.findOne({CloseDate: {$exists: false} })
+        .where('_CreatedBy').equals(req.session.user._id)
+        .where('_id').equals(req.query.id)
+        .populate('_Product')
+        .populate('_Equipment')
+        .exec(function (err, order){
+            res.render('modal1.jade', 
+                  { OrderDetails: order,
+                    customerNames: req.session.user.CustomerName, 
+                    Today123: date
+                })
+        });
+    }
+}; 
+
+
+
+//Render customer service order details
+ exports.neworder = function (req, res){
+
+  var myOrders = [];
+  var myEquip = [];
+  var myEquipment = [];
+  var myServicetypes = [];
+  var myPriorities = [];
+  var myPmTypes = [];
+
+  var date = moment();
+
+  if (!req.session.loggedIn){
+        res.redirect('/login');
+    }else {
+
+          async.parallel([
+              function(callback){
+                ServiceOrder.find({CloseDate: {$exists: false} })
+                .where('_CreatedBy').equals(req.session.user._id )
+                .populate('_Product')
+                .populate('_Equipment')
+                .exec(function (err, orders){
+                  if (err){
+                    return callback(err);
+                  }
+                    orders.forEach(function(orders){
+                      myOrders.push(orders);
+                    });
+                    callback();
+                });
+              },
+              function(callback){
+                Equipment.find({ _User: req.session.user._id })
+                    .populate('_Product')
+                    .sort('NextPMDate')
+                    .exec(function (err, equipment){
+                      if (!err){
+                        equipment.forEach(function(equipment){
+                          myEquip.push(equipment);
+                          });
+                      }else {
+                            return callback(err);
+                      }
+                        callback();
+                    });
+                },
+                function(callback){
+                Equipment.find({ _User: req.session.user._id })
+                .populate('_Product')
+                .sort('_Product')
+                .exec(function (err, equipment){
+                    if(!err) {
+                        equipment.forEach(function(myequip){
+                            if (myequip.SerialNumber == req.query.serial){
+                                myEquipment.push({
+                                    "_id": myequip._id,
+                                    "SerialNumber": myequip.SerialNumber,
+                                    "ProductName": myequip._Product.ProductName,
+                                    "Room": myequip.Room,
+                                    "ProductID": myequip._Product._id
+                                });
+                            }
+                        });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+                ProblemType.find()
+                .exec(function (err, problemtypes){
+                    if(!err) {
+                        problemtypes.forEach(function(myproblemtypes){
+                            myServicetypes.push({
+                                "_id": myproblemtypes._id,
+                                "ProblemTypeDescription": myproblemtypes.ProblemTypeDescription
+                            });
+                        });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+                PMType.find()
+                .exec(function (err, pmtypes){
+                    if(!err){
+                        pmtypes.forEach(function(mypmtypes){
+                            myPmTypes.push({
+                                "_id": mypmtypes._id,
+                                "PMDescription": mypmtypes.PMDescription
+                            });
+                         });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                });
+            },
+            function(callback){
+                 Priority.find()
+                .exec(function (err, priorities){
+                    if(!err){
+                        priorities.forEach(function(mypriorities){
+                            myPriorities.push({
+                                "_id": mypriorities._id,
+                                "PriorityDescription": mypriorities.PriorityDescription
+                            });
+                        });
+                    }else {
+                        return callback(err);
+                    }
+                    callback();
+                    
+                });
+            }], function(err){
+                        if (err) return next(err);
+                        else {
+                          res.render('modal2.jade', 
+                          { Orders: myOrders,
+                            Equipment: myEquip,
+                            title: "Create a New Service Request",
+                            equipments: myEquipment,
+                            serviceTypes: myServicetypes,
+                            pmTypes: myPmTypes,
+                            priorities: myPriorities,
+                            customerName: req.session.user.CustomerName, 
+                            Today: date})
+                        }
+                    }
+            );
+    }
+}; 
 
 //Populate open service request and equipment data for customer portal
 exports.portal = function(req, res){

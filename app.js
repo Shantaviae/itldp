@@ -97,8 +97,10 @@ app.get('/logout', user.doLogout);							//Invalidate Session and Logout.
 
 //Customer Routes
 app.get('/customer', customer.portal);
+app.get('/customer/details', customer.details);				//See service order details
 app.get('/customer/create', customer.create);				//Form to Create a new Service Order
-app.post('/customer/create', customer.doCreate); 				//Process New Service Ticket
+app.post('/customer/create', customer.doCreate); 			//Process New Service Ticket
+app.get('/customer/neworder', customer.neworder)
 
 //engineer routes
 app.get('/engineer', engineer.portal);

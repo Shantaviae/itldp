@@ -1,0 +1,76 @@
+doctype 5
+html
+  head
+  body
+    form(role="form" id="detail" name="detail" method="" action="")
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+        h4.myModalLabel.modal-title Service Request ##{OrderDetails._id}
+      .modal-body 
+        .modal-body.form-horizontal
+          .form-group(style="background-color:RGB(222,227,248); padding:5px; border-radius:5px;")
+            label.col-sm-2.control-label Problem:
+            .col-sm-4
+              .form-control-static #{OrderDetails.ProblemTypeDescription}
+            label.col-sm-2.control-label Priority:
+            .col-sm-4
+              .form-control-static #{OrderDetails.PriorityDescription}
+            label.col-sm-2.control-label Requester:
+            .col-sm-4
+              .form-control-static #{customerNames}
+            label.col-sm-2.control-label Location:
+            .col-sm-4
+              .form-control-static #{OrderDetails._Equipment.Room}
+          .form-group(style="background-color:RGB(222,227,248); padding:5px; border-radius:5px;")
+            label.col-sm-4.control-label Status:
+            .col-sm-8(style="text-align:left")
+              if OrderDetails.CurrentStatus == "Completed"
+                .form-control-static.good #{OrderDetails.CurrentStatus}
+              else if OrderDetails.CurrentStatus == "Waiting For Customer Approval"
+                .form-control-static.good #{OrderDetails.CurrentStatus}
+              else
+                .form-control-static.ok #{OrderDetails.CurrentStatus} 
+            label.col-sm-4.control-label Open Date:
+            .col-sm-8(style="text-align:left")
+              .form-control-static #{moment(OrderDetails.OpenDate).format('MMMM D, YYYY h:mm a')}        
+          .form-group(style="background-color:RGB(222,227,248); padding:5px; border-radius:5px; text-align:left;")
+            label.col-sm-12.control-label(style="text-align:center;") Order History 
+              span.badge #{OrderDetails.ServiceDetails.length}  
+            -for services in OrderDetails.ServiceDetails
+              if services.StatusDescription == 'Submitted By Customer'
+                .col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+              else if services.StatusDescription == 'Assigned, Waiting to be Accepted'
+                div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Assigned Date: #{moment(services.AssignedDate).format('MMMM D, YYYY h:mm a')}
+              else if services.StatusDescription == 'Accepted'
+                div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Accepted Date: #{moment(services.AcceptedDate).format('MMMM D, YYYY h:mm a')}
+              else if services.StatusDescription == 'Completed'
+                div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check In Date: #{moment(services.Checkin).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check Out Date: #{moment(services.Checkout).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Action Notes: #{services.ActionNotes}
+              else if services.StatusDescription == 'Waiting For Customer Approval'
+                div.col-sm-12.form-control-static #{services._id}. #{services.StatusDescription}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check In Date: #{moment(services.Checkin).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Check Out Date: #{moment(services.Checkout).format('MMMM D, YYYY h:mm a')}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Action Notes: #{services.ActionNotes}
+                div.col-sm-12.form-control-static(style="padding-left:35px;") - Actual Minutes: #{services.ActualMinutes} Minutes
+          .modal-footer
+            input(type="hidden" name="Today" value="#{Today}")
+            button.btn.btn-danger(type='button' data-dismiss='modal') Close
+    script
+      $(document).ready(function(){
+        $('#ProblemType').change(function() {
+          var probSelect = $('#ProblemType option:selected').val();
+          if(probSelect == "Preventative Maintenance") {
+            $('#PM').html("<label class='col-sm-2 control-label PM2' for='PMType'> Preventative Maintenance Type: </label>\
+            <div class='col-sm-10'> <select id='pmOptions' class='form-control PM2' name='PMType' id='PMType' required> <option value='' default selected> Select The Preventative Maintenance Type Required </option>");
+            $.each( !{JSON.stringify(pmTypes)}, function( key, pmtypes ){
+              $('#pmOptions').append("<option value='" + pmtypes.PMDescription + "'>" + pmtypes.PMDescription + "</option>");
+            });
+          }else {
+            $('.PM2').hide();
+          }
+        });
+      });

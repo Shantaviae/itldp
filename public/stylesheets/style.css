@@ -16,7 +16,16 @@ height:220px;
 width:780px;
 }
 
+.good {color:green;}
+.ok {color:orange;}
+.bad {color:red;}
+
 td {padding: 5px;}
+
+.thstyle {
+	padding:5px; 
+	color:grey; 
+	text-align:center;
 }
 .instructions {
 	font-size: 12pt;
@@ -28,7 +37,10 @@ td {padding: 5px;}
   	background-repeat: no-repeat;
 	width: auto; /*or your image's width*/
 	height: 200px;
-
+	background-size: cover;
+	background-position: center center;
+	background-attachment: fixed;
+	background-repeat: no-repeat;
 	margin: 0;
 	padding: 0;
 }
