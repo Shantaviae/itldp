@@ -1,5 +1,5 @@
 body {
-  padding: 50px;
+  padding: 20px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   text-align: center;
 }
@@ -32,15 +32,11 @@ td {padding: 5px;}
 	color:blue;
 }
 
-.jumbotron {
-	background-image: url(/images/doctors.jpg); 
+.jumbotron {	
+	background-image: url(/images/doctor3.jpg); 
   	background-repeat: no-repeat;
 	width: auto; /*or your image's width*/
-	height: 200px;
-	background-size: cover;
-	background-position: center center;
-	background-attachment: fixed;
-	background-repeat: no-repeat;
+	height: 300px;
 	margin: 0;
 	padding: 0;
 }

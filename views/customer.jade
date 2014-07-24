@@ -25,14 +25,15 @@ html
       ul.nav.nav-pills
         li.active 
           a(href="/hi") Home
-        li 
-          a(href="/") Settings
         li(style="float:right")
           a(href="/logout") Log Out
 
+    .container
+      .jumbotron
+
     //Jumbotron
-    .jumbotron
-      .container
+    //-.jumbotron
+    //-  .container-fluid
 
     h1(style="color:RGB(66,139,202);") Open Service Orders 
     div
@@ -71,7 +72,11 @@ html
               a(data-toggle="modal" href="/customer/neworder?serial=#{equip.SerialNumber}" data-target="#myModal2")=equip.SerialNumber
             td(style="padding:5px")= equip._Product.ProductName
             td(style="padding:5px")= equip.NextPMDescription
-            td(style="padding:5px") #{moment(equip.NextPMDate).format('MMMM D, YYYY')}
+            td(style="padding:5px") 
+              if (Today >= moment(equip.NextPMDate))
+                span(style="color:red;") #{moment(equip.NextPMDate).format('MMMM D, YYYY')}
+              else
+                span(style="color:green;") #{moment(equip.NextPMDate).format('MMMM D, YYYY')}
 
 
     script
