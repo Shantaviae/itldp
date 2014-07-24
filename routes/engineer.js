@@ -221,7 +221,8 @@ exports.portal = function(req, res){
 			function(callback){
 				ServiceOrder.find({ CloseDate: { $exists: false}})
 				.where('_AssignedTo').equals(req.session.user._id)
-				.where('CurrentStatus').equals('Accepted')
+				.where('CurrentStatus').ne('Assigned, Waiting to be Accepted')
+				.where('CurrentStatus').ne('On-site')
 				//.select('_id SerialNumber OpenDate ProblemTypeDescription ProductName CurrentStatus _Equipment _Product')
 				.populate('_Product')
 				.populate('_Equipment')
@@ -231,6 +232,7 @@ exports.portal = function(req, res){
 					ServiceOrder.forEach(function(ServiceOrder){
 						myOrders.push({
 							"_id": ServiceOrder._id,
+							"CurrentStatus": CurrentStatus,
 							"PriorityDescription": ServiceOrder.PriorityDescription,
 							"CustomerName": ServiceOrder._CreatedBy.CustomerName,
 							"Street": ServiceOrder._CreatedBy.Street,
@@ -375,6 +377,7 @@ exports.Checkout = function(req, res){
         serviceorder.ServiceDetails[id].ActionNotes = req.body.StatusDescription;
         serviceorder.ServiceDetails[id].Checkout = req.body.Today;
         serviceorder.CurrentStatus = req.body.StatusDescription;
+        if (req.body.StatusDescription = "Completed") serviceorder.CloseDate = req.body.Today;
         serviceorder.save(function (err, serviceorder){
         	res.redirect('/engineer')
         });

@@ -67,6 +67,7 @@ html
           th(style="padding:5px; color:grey; text-align:center;") Customer 
           th(style="padding:5px; color:grey; text-align:center;") Product
           th(style="padding:5px; color:grey; text-align:center;") Problem Type
+          th(style="padding:5px; color:grey; text-align:center;") Status
           th(style="padding:5px; color:grey; text-align:center;") Priority
 
         for accept in accepted
@@ -76,6 +77,7 @@ html
             td(style="padding:5px")= accept.CustomerName
             td(style="padding:5px")= accept._Product
             td(style="padding:5px")= accept.ProblemTypeDescription
+            td(style="padding:5px")= accept.CurrentStatus
             td(style="padding:5px")= accept.PriorityDescription
             td(style="padding:5px") 
               form(name='form2'  action='/engineer/checkin' method='post')
