@@ -172,8 +172,8 @@ exports.portal = function(req, res){
 			function(callback){
 				ServiceOrder.find({ CloseDate: { $exists: false}})
 				.where('_AssignedTo').equals(req.session.user._id)
-				.where('CurrentStatus').ne('Assigned, Waiting to be Accepted')
-				.where('CurrentStatus').ne('On-site')
+				.nor([{CurrentStatus:'Assigned, Waiting to be Accepted'}, {CurrentStatus: 'On-site'}])
+				//.where('CurrentStatus').ne('On-site')
 				//.select('_id SerialNumber OpenDate ProblemTypeDescription ProductName CurrentStatus _Equipment _Product')
 				.populate('_Product')
 				.populate('_Equipment')
