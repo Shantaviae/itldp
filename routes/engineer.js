@@ -25,13 +25,13 @@ var moment = require('moment');
         .where('_id').equals(req.query.id)
         .populate('_Product')
         .populate('_Equipment')
+        .populate('_CreatedBy')
         .exec(function (err, order){
         	console.log("------------------------Test --------------------------");
         	console.log(order);
         	console.log("--------------------------------------------------------");
             res.render('modal1engineer.jade', 
                   { OrderDetails: order,
-                    customerNames: req.session.user.CustomerName, 
                     Today123: date
                 })
         });
