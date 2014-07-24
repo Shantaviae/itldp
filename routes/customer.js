@@ -11,7 +11,7 @@ var _ = require('underscore');
 var async = require('async');
 
 
-//Render customer service order details
+//Render customer service order details - Customer Portal
  exports.details = function (req, res){
     var date = moment();
 
@@ -33,7 +33,6 @@ var async = require('async');
         });
     }
 }; 
-
 
 
 //Render customer service order details
