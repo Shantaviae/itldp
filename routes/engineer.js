@@ -331,13 +331,13 @@ exports.Checkout = function(req, res){
         if (serviceorder.CurrentStatus == "Completed") {
             serviceorder.CloseDate = req.body.Today;
         }
-        console.log("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk    " +moment(serviceorder.ServiceDetails[id].Checkin).diff(req.body.Today, 'minutes'));
+        //console.log("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm    " +moment(serviceorder.ServiceDetails[id].Checkin).diff(req.body.Today, 'minutes'));
         serviceorder.save(function (err, serviceorder){
             if(!err){
         	res.redirect('/engineer')
                 
             } else{
-                console.log('siloadfsiadubfioudsbfoiuabsf    '+err);
+                console.log('eror goes here    '+err);
             }
         });
 	});
