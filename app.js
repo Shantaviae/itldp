@@ -104,7 +104,9 @@ app.get('/customer/neworder', customer.neworder)
 
 //engineer routes
 app.get('/engineer', engineer.portal);
-app.post('/engineer', engineer.Accept);
+app.post('/engineer/accept', engineer.Accept);
+app.post('/engineer/checkin', engineer.Checkin);
+app.post('/engineer/checkout', engineer.Checkout);
 
 //SeviceDetails
 

@@ -15,8 +15,6 @@ html
       ul.nav.nav-pills
         li.active 
           a(href="/hi") Home
-        li 
-          a(href="/") Settings
         li(style="float:right")
           a(href="/") Log Out
 
@@ -40,6 +38,13 @@ html
             td= onsite._Product
             td= onsite.ProblemTypeDescription
             td= onsite.PriorityDescription
+            td
+              form(name='form2'  action='/engineer/checkout' method='post')
+                input(type="hidden" name="Today" value="#{Today}")
+                input(type="hidden" name="_id" value="#{onsite._id}")
+                input(type="hidden" name="StatusDescription" value="Completed")
+                input(type="hidden" name="ActionNotes" value="test note")
+                button.btn.btn-success(type="submit" name="submit" value="submit") checkout
     h1 Accepted Service Orders 
     div
       table
@@ -57,6 +62,11 @@ html
             td= accept._Product
             td= accept.ProblemTypeDescription
             td= accept.PriorityDescription
+            td 
+              form(name='form2'  action='/engineer/checkin' method='post')
+                input(type="hidden" name="Today" value="#{Today}")
+                input(type="hidden" name="_id" value="#{accept._id}")
+                button.btn.btn-success(type="submit" name="submit" value="submit") checkin
     h1 Assigned Service Orders 
     div
       table
@@ -75,7 +85,7 @@ html
             td= assign.ProblemTypeDescription
             td= assign.PriorityDescription
             td
-              form(name='form1'  action='' method='post')
+              form(name='form1'  action='/engineer/accept' method='post')
                 input(type="hidden" name="Today" value="#{Today}")
-                input(type="hidden" name="_id" value="547536") 
+                input(type="hidden" name="_id" value="#{assign._id}") 
                 button.btn.btn-success(type="submit" name="submit" value="submit") accept

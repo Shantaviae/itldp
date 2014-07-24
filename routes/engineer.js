@@ -180,7 +180,7 @@ exports.Accept = function(req, res){
 	});
 };
 exports.Checkin = function(req, res){ 
-	console.log(req.body._id);
+	
 	ServiceOrder.findById( req.body._id )
 	.exec(function (err, serviceorder){
 		console.log(serviceorder)
@@ -192,6 +192,7 @@ exports.Checkin = function(req, res){
         });
         serviceorder.CurrentStatus = "On-site";
         console.log(serviceorder)
+        //console.log("bugs check in");
         serviceorder.save(function (err, serviceorder){
         	res.redirect('/engineer')
         });
@@ -201,11 +202,13 @@ exports.Checkout = function(req, res){
 	console.log(req.body._id);
 	ServiceOrder.findById( req.body._id )
 	.exec(function (err, serviceorder){
-		console.log(serviceorder)
-      	var id = serviceorder.ServiceDetails.length;
+		//console.log(serviceorder)
+      	var id = serviceorder.ServiceDetails.length-1;
+      	console.log(id);
+      	console.log(serviceorder.ServiceDetails[1])
         serviceorder.ServiceDetails[id].StatusDescription = req.body.StatusDescription;
         serviceorder.ServiceDetails[id].ActionNotes = req.body.StatusDescription;
-        Checkout: req.body.Today;
+        serviceorder.ServiceDetails[id].Checkout = req.body.Today;
         serviceorder.CurrentStatus = req.body.StatusDescription;
         serviceorder.save(function (err, serviceorder){
         	res.redirect('/engineer')
