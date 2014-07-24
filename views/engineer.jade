@@ -10,6 +10,16 @@ html
     script(src="/javascripts/jquery-2.0.3.min.js")
     script(src="/javascripts/bootstrap.min.js")
 
+    //View service order details
+    .modal.fade(tabindex="-1" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+
+    //Check out a service order
+    .modal.fade(tabindex="-1" id="myModal2" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+        .modal-dialog
+          .modal-content
+
     //Header
     .page-header
       ul.nav.nav-pills
@@ -19,73 +29,88 @@ html
           a(href="/") Log Out
 
     //Jumbotron
-    .jumbotron
-      .container
-    h1 On-Site Service Orders 
-    div
-      table
+    .container
+      .jumbotron
+
+    h1(style="color:#FF9C00;") On-Site Service Orders 
+    div.tables
+      table(style="width:100%")
         tr
-          th Service Order
-          th Customer 
-          th Product
-          th Problem Type
-          th Priority
+          th(style="padding:5px; color:grey; text-align:center;") Service Order
+          th(style="padding:5px; color:grey; text-align:center;") Customer 
+          th(style="padding:5px; color:grey; text-align:center;") Product
+          th(style="padding:5px; color:grey; text-align:center;") Problem Type
+          th(style="padding:5px; color:grey; text-align:center;") Priority
 
         for onsite in onsited
           tr
-            td= onsite._id
-            td= onsite.CustomerName
-            td= onsite._Product
-            td= onsite.ProblemTypeDescription
-            td= onsite.PriorityDescription
+            td(style="padding:5px")
+              a(data-toggle="modal" href="/engineer/details?id=#{onsite._id}" data-target="#myModal")= onsite._id
+            td(style="padding:5px")= onsite.CustomerName
+            td(style="padding:5px")= onsite._Product
+            td(style="padding:5px")= onsite.ProblemTypeDescription
+            td(style="padding:5px")= onsite.PriorityDescription
             td
               form(name='form2'  action='/engineer/checkout' method='post')
                 input(type="hidden" name="Today" value="#{Today}")
                 input(type="hidden" name="_id" value="#{onsite._id}")
                 input(type="hidden" name="StatusDescription" value="Completed")
                 input(type="hidden" name="ActionNotes" value="test note")
-                button.btn.btn-success(type="submit" name="submit" value="submit") checkout
-    h1 Accepted Service Orders 
-    div
-      table
+                a.btn.btn-success(data-toggle="modal" href="/engineer/checkoutModal?orderID=#{onsite._id}" data-target="#myModal2") Check Out
+    
+
+    h1(style="color:#FF9C00") Accepted Service Orders 
+    div.tables
+      table(style="width:100%")
         tr
-          th Service Order
-          th Customer 
-          th Product
-          th Problem Type
-          th Priority
+          th(style="padding:5px; color:grey; text-align:center;") Service Order
+          th(style="padding:5px; color:grey; text-align:center;") Customer 
+          th(style="padding:5px; color:grey; text-align:center;") Product
+          th(style="padding:5px; color:grey; text-align:center;") Problem Type
+          th(style="padding:5px; color:grey; text-align:center;") Priority
 
         for accept in accepted
           tr
-            td= accept._id
-            td= accept.CustomerName
-            td= accept._Product
-            td= accept.ProblemTypeDescription
-            td= accept.PriorityDescription
-            td 
+            td(style="padding:5px")
+              a(data-toggle="modal" href="/engineer/details?id=#{accept._id}" data-target="#myModal")= accept._id
+            td(style="padding:5px")= accept.CustomerName
+            td(style="padding:5px")= accept._Product
+            td(style="padding:5px")= accept.ProblemTypeDescription
+            td(style="padding:5px")= accept.PriorityDescription
+            td(style="padding:5px") 
               form(name='form2'  action='/engineer/checkin' method='post')
                 input(type="hidden" name="Today" value="#{Today}")
                 input(type="hidden" name="_id" value="#{accept._id}")
-                button.btn.btn-success(type="submit" name="submit" value="submit") checkin
-    h1 Assigned Service Orders 
-    div
-      table
+                button.btn.btn-success(type="submit" name="submit" value="submit") Check In
+    
+
+    h1(style="color:#FF9C00;") Assigned Service Orders 
+    div.tables
+      table(style="width:100%")
         tr
-          th Service Order
-          th Customer 
-          th Product
-          th Problem Type
-          th Priority
+          th(style="padding:5px; color:grey; text-align:center;") Service Order
+          th(style="padding:5px; color:grey; text-align:center;") Customer 
+          th(style="padding:5px; color:grey; text-align:center;") Product
+          th(style="padding:5px; color:grey; text-align:center;") Problem Type
+          th(style="padding:5px; color:grey; text-align:center;") Priority
 
         for assign in assigned
           tr
-            td= assign._id
-            td= assign.CustomerName
-            td= assign._Product
-            td= assign.ProblemTypeDescription
-            td= assign.PriorityDescription
-            td
+            td(style="padding:5px")
+              a(data-toggle="modal" href="/engineer/details?id=#{assign._id}" data-target="#myModal")= assign._id
+            td(style="padding:5px")= assign.CustomerName
+            td(style="padding:5px")= assign._Product
+            td(style="padding:5px")= assign.ProblemTypeDescription
+            td(style="padding:5px")= assign.PriorityDescription
+            td(style="padding:5px")
               form(name='form1'  action='/engineer/accept' method='post')
                 input(type="hidden" name="Today" value="#{Today}")
                 input(type="hidden" name="_id" value="#{assign._id}") 
                 button.btn.btn-success(type="submit" name="submit" value="submit") accept
+
+    script
+      $(document).ready(function(){
+        $('body').on('hidden.bs.modal', '.modal', function () {
+          $(this).removeData('bs.modal');
+        });
+      });
