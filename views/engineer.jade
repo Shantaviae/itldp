@@ -50,7 +50,7 @@ html
             td(style="padding:5px")= onsite._Product
             td(style="padding:5px")= onsite.ProblemTypeDescription
             td(style="padding:5px")= onsite.PriorityDescription
-            td
+            td(style="padding:5px")
               form(name='form2'  action='/engineer/checkout' method='post')
                 input(type="hidden" name="Today" value="#{Today}")
                 input(type="hidden" name="_id" value="#{onsite._id}")
@@ -108,7 +108,7 @@ html
               form(name='form1'  action='/engineer/accept' method='post')
                 input(type="hidden" name="Today" value="#{Today}")
                 input(type="hidden" name="_id" value="#{assign._id}") 
-                button.btn.btn-success(type="submit" name="submit" value="submit") accept
+                button.btn.btn-success(type="submit" name="submit" value="submit") Accept
 
     script
       $(document).ready(function(){

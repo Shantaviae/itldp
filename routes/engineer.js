@@ -47,6 +47,7 @@ var async = require('async');
   var myServicetypes = [];
   var myPriorities = [];
   var myPmTypes = [];
+  var myStatus = [];
 
   var date = moment();
 
@@ -109,13 +110,14 @@ var async = require('async');
                 });
             },
             function(callback){
-                ProblemType.find()
-                .exec(function (err, problemtypes){
+                Status.find()
+                .where('_id').lte(4)
+                .exec(function (err, statustypes){
                     if(!err) {
-                        problemtypes.forEach(function(myproblemtypes){
-                            myServicetypes.push({
-                                "_id": myproblemtypes._id,
-                                "ProblemTypeDescription": myproblemtypes.ProblemTypeDescription
+                       statustypes.forEach(function(mystatus){
+                            myStatus.push({
+                                "_id": mystatus._id,
+                                "StatusDescription": mystatus.StatusDescription
                             });
                         });
                     }else {
@@ -164,7 +166,7 @@ var async = require('async');
                             Equipment: myEquip,
                             title: "Create a New Service Request",
                             equipments: myEquipment,
-                            serviceTypes: myServicetypes,
+                            statusTypes: myStatus,
                             pmTypes: myPmTypes,
                             priorities: myPriorities,
                             customerName: req.session.user.CustomerName, 

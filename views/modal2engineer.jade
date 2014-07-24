@@ -8,27 +8,17 @@ html
         h4.myModalLabel.modal-title Check Out of Service Request
       .modal-body 
         .modal-body.form-horizontal
-          //- .form-group
-          //-   label.col-sm-2.control-label Customer:
-          //-   .col-sm-10
-          //-     p.form-control-static #{customerName}
-          //- .form-group
-          //-   label.col-sm-2.control-label Date Request Opened:
-          //-   .col-sm-10
-          //-     p.form-control-static #{moment(Today).format('dddd, MMMM Do YYYY')}
-          //- .form-group
-          //-   label.col-sm-2.control-label(for="Equipment") Equipment:
-          //-   .col-sm-10
-          //-     //-p.form-control#EquipmentDefault
-          //-     select.form-control(name="Equipment" id="Equipment" required autofocus)
-          //-       option(value="{\"equipid\": #{equipments[0]._id}, \"prodid\": #{equipments[0].ProductID}}" default selected) #{equipments[0].SerialNumber} - #{equipments[0]].ProductName} - #{equipments[0].Room}
-          //- .form-group
-          //-   label.col-sm-2.control-label(for="ProblemType") Service Type:
-          //-   .col-sm-10
-          //-     select.form-control(name="ProblemType" id="ProblemType"  required)
-          //-       option(value="" default selected) Select The Problem Type You Are Experiencing
-          //-       - for serviceType in serviceTypes
-          //-         option(value="#{serviceType.ProblemTypeDescription}") #{serviceType.ProblemTypeDescription}
+          .form-group
+            label.col-sm-3.control-label Date Checked Out:
+            .col-sm-9
+              p.form-control-static #{moment(Today).format('dddd, MMMM Do YYYY')}
+          .form-group
+            label.col-sm-3.control-label(for="Status") Status:
+            .col-sm-9
+              select.form-control(name="StatusDescription" id="StatusDescription"  required)
+                option(value="" default selected) Select The Current Status
+                 for statusType in statusTypes
+                  option(value="#{statusType.StatusDescription}") #{statusType.StatusDescription}
           //- .form-group(id="PM")
           //- .form-group
           //-   label.col-sm-2.control-label(for="Priority") Priority:
@@ -49,9 +39,10 @@ html
           //-   label.col-sm-2.control-label(for="ContactPhone") Contact Phone:
           //-   .col-sm-10
           //-     input.form-control(type="tel" name="ContactPhone" id="ContactPhone"  required placeholder="Example: 123-456-7890")
-          //- .form-group
-          //-   .col-sm-offset-2.col-sm-10
-          //-     textarea.form-control(id="ProblemNotes" rows="7" name="ProblemNotes" placeholder="Add Any Additonal Problem Notes Here...")
+          .form-group
+            label.col-sm-3.control-label Notes:
+            .col-sm-9
+              textarea.form-control(id="ActionNotes" rows="7" name="ActionNotes" placeholder="Add Any Action Notes Here...")
           .modal-footer
             input(type="hidden" name="Today" value="#{Today}")
             button.btn.btn-success(type="submit" name="submit" value="submit") Check Out
