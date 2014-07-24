@@ -376,6 +376,7 @@ exports.Checkout = function(req, res){
         serviceorder.ServiceDetails[id].StatusDescription = req.body.StatusDescription;
         serviceorder.ServiceDetails[id].ActionNotes = req.body.StatusDescription;
         serviceorder.ServiceDetails[id].Checkout = req.body.Today;
+        serviceorder.ServiceDetails[id].ActualMinutes = moment(serviceorder.ServiceDetails[id].Checkin).diff(req.body.Today, 'minutes')
         serviceorder.CurrentStatus = req.body.StatusDescription;
         if (req.body.StatusDescription = "Completed") serviceorder.CloseDate = req.body.Today;
         serviceorder.save(function (err, serviceorder){
