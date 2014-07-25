@@ -21,7 +21,7 @@ html
             .col-sm-10
               //-p.form-control#EquipmentDefault
               select.form-control(name="Equipment" id="Equipment" required autofocus)
-                option(value="{\"equipid\": #{equipments[0]._id}, \"prodid\": #{equipments[0].ProductID}}" default selected) #{equipments[0].SerialNumber} - #{equipments[0]].ProductName} - #{equipments[0].Room}
+                option(value="{\"equipid\": #{equipments[0]._id}, \"prodid\": #{equipments[0].ProductID}}" default selected) #{equipments[0].SerialNumber} - #{equipments[0].ProductName} - #{equipments[0].Room}
           .form-group
             label.col-sm-2.control-label(for="ProblemType") Service Type:
             .col-sm-10
